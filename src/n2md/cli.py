@@ -4,7 +4,7 @@ from pathlib import Path
 
 import typer
 
-from .converter import convert
+from n2md import convert
 
 cli = typer.Typer()
 
