@@ -9,7 +9,6 @@ import n2md
 from n2md import converter
 
 
-@pytest.mark.xfail
 def test_converter(notion: Path, markdown: Path):
     notion_md = notion.read_text()
     regular_md = markdown.read_text()
