@@ -5,6 +5,11 @@
 
 </aside>
 
+<aside>
+💡 Here is a second callout for good measure.
+
+</aside>
+
 # Heading 1
 
 ## Heading 2
@@ -38,7 +43,6 @@ If we so please.
 - [ ]  Items
 
 > We can also form quotes. These quotes can contain ****************************formatted text**************************** *****also*****.
-> 
 
 ```python
 def code_block() -> str:
