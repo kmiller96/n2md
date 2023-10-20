@@ -55,6 +55,6 @@ def _fix_headings(notion: str) -> str:
             flags=re.MULTILINE,
         )
 
-    notion = notion.replace("##", "#", 1)  # The first occurance goes back to H1
+    notion = notion.replace("## ", "# ", 1)  # The first occurance goes back to H1
 
     return notion
