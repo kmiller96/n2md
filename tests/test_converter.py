@@ -1,5 +1,6 @@
 """Validates the converter algorithm behaves."""
 
+from textwrap import dedent
 from pathlib import Path
 
 import pytest
@@ -28,3 +29,27 @@ def test_converter(notion: Path, markdown: Path):
 )
 def test_removing_superfluous_stars(original: str, clean: str):
     assert converter._remove_extra_stars(original) == clean
+
+
+def test_fixing_headings():
+    original = dedent(
+        """
+        # Title
+
+        # Heading 1
+        ## Heading 2
+        ### Heading 3
+        """
+    ).strip("\n")
+
+    expected = dedent(
+        """
+        # Title
+
+        ## Heading 1
+        ### Heading 2
+        #### Heading 3
+        """
+    ).strip("\n")
+
+    assert converter._fix_headings(original) == expected
