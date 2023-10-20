@@ -38,7 +38,6 @@ If we so please.
 - [ ]  Items
 
 > We can also form quotes. These quotes can contain ****************************formatted text**************************** *****also*****.
-> 
 
 ```python
 def code_block() -> str:
