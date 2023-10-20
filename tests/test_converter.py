@@ -53,3 +53,43 @@ def test_fixing_headings():
     ).strip("\n")
 
     assert converter._fix_headings(original) == expected
+
+
+def test_converting_callouts_to_quotes():
+    original = dedent(
+        """
+        <aside>
+        This is a callout.
+        </aside>
+        """
+    ).strip("\n")
+
+    expected = dedent(
+        """
+        > This is a callout.
+        """
+    ).strip("\n")
+
+    assert converter._convert_callouts_to_quotes(original) == expected
+
+
+def test_converting_callouts_to_quotes_multiple_times():
+    original = dedent(
+        """
+        <aside>
+        This is a callout.
+        </aside>
+        <aside>
+        This is another callout.
+        </aside>
+        """
+    ).strip("\n")
+
+    expected = dedent(
+        """
+        > This is a callout.
+        > This is another callout.
+        """
+    ).strip("\n")
+
+    assert converter._convert_callouts_to_quotes(original) == expected
