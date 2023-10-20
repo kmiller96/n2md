@@ -10,7 +10,7 @@
 
 Paragraph with plain text.
 
-Paragraph with **formatted** text, such as *italics* or underlines. We can also do a ***mix*** of formatting.
+Paragraph with **formatted** text, such as *italics* or underlines. We can also do a *mix* of formatting.
 
 An inline [link](https://google.com).
 
@@ -34,7 +34,7 @@ If we so please.
 - [ ]  List
 - [ ]  Items
 
-> We can also form quotes. These quotes can contain **formatted text** ***also***.
+> We can also form quotes. These quotes can contain **formatted text** *also*.
 
 ```python
 def code_block() -> str:
