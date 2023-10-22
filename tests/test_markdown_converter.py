@@ -1,4 +1,4 @@
-"""Validates the converter algorithm behaves."""
+"""Validates the markdown converter algorithm behaves."""
 
 from textwrap import dedent
 from pathlib import Path
