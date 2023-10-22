@@ -1,19 +1,34 @@
-"""Validates the converter algorithm behaves."""
+"""Validates the markdown converter algorithm behaves."""
 
 from textwrap import dedent
 from pathlib import Path
 
 import pytest
 
-import n2md
-from n2md import converter
+import n2md.converters.markdown as md
+
+##############
+## Fixtures ##
+##############
 
 
-def test_converter(notion: Path, markdown: Path):
-    notion_md = notion.read_text()
-    regular_md = markdown.read_text()
+@pytest.fixture
+def original(datadir: Path) -> Path:
+    return datadir / "markdown" / "original.md"
 
-    assert n2md.convert(notion_md) == regular_md
+
+@pytest.fixture
+def expected(datadir: Path) -> Path:
+    return datadir / "markdown" / "expected.md"
+
+
+###########
+## Tests ##
+###########
+
+
+def test_converter(original: Path, expected: Path):
+    assert md.convert(original.read_text()) == expected.read_text()
 
 
 @pytest.mark.parametrize(
@@ -27,7 +42,7 @@ def test_converter(notion: Path, markdown: Path):
     ],
 )
 def test_removing_superfluous_stars(original: str, clean: str):
-    assert converter._remove_extra_stars(original) == clean
+    assert md._remove_extra_stars(original) == clean
 
 
 def test_fixing_headings():
@@ -51,7 +66,7 @@ def test_fixing_headings():
         """
     ).strip("\n")
 
-    assert converter._fix_headings(original) == expected
+    assert md._fix_headings(original) == expected
 
 
 def test_converting_callouts_to_quotes():
@@ -69,7 +84,7 @@ def test_converting_callouts_to_quotes():
         """
     ).strip("\n")
 
-    assert converter._convert_callouts_to_quotes(original) == expected
+    assert md._convert_callouts_to_quotes(original) == expected
 
 
 def test_converting_callouts_to_quotes_multiple_times():
@@ -91,4 +106,4 @@ def test_converting_callouts_to_quotes_multiple_times():
         """
     ).strip("\n")
 
-    assert converter._convert_callouts_to_quotes(original) == expected
+    assert md._convert_callouts_to_quotes(original) == expected
