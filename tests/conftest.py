@@ -14,13 +14,13 @@ def datadir() -> Path:
 @pytest.fixture
 def notion_markdown(datadir: Path) -> Path:
     """Returns a Path to a Notion markdown export."""
-    return datadir / "notion.md"
+    return datadir / "markdown" / "notion.md"
 
 
 @pytest.fixture
 def notion_json(datadir: Path) -> Path:
     """Returns a Path to a Notion JSON export."""
-    return datadir / "notion.json"
+    return datadir / "json" / "notion.json"
 
 
 @pytest.fixture

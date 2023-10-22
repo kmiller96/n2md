@@ -4,6 +4,11 @@ import json
 
 import warnings
 
+from ._common import (
+    simplify_newlines as _simplify_newlines,
+    fix_headings as _fix_headings,
+)
+
 ###################
 ## Main Function ##
 ###################
@@ -18,14 +23,16 @@ def convert(notion: str) -> str:
     to this structure, for now I've just manually copied this file into our
     testing suite.
     """
-    output = ""
-
     notion = json.loads(notion)
+
+    output = ""
+    output += parse_title(notion["metadata"])
 
     for block in notion["content"]["results"]:
         md = block_to_markdown(block)
         output += md
 
+    output = _fix_headings(output)
     output = _simplify_newlines(output)
 
     return output
@@ -36,19 +43,25 @@ def convert(notion: str) -> str:
 ################
 
 
+def parse_title(metadata: dict) -> str:
+    """Parses the title of the page."""
+    title = metadata["properties"]["title"]["title"][0]["plain_text"]
+    return f"# {title}\n\n"
+
+
 def block_to_markdown(block: dict) -> str:
     """Takes the JSON representation of a block and converts it to markdown."""
     block_type = block["type"]
 
     match block["type"]:
+        case "paragraph":
+            return _format_paragraph(block["paragraph"])
         case "heading_1":
             return _format_heading(block["heading_1"], 1)
         case "heading_2":
             return _format_heading(block["heading_2"], 2)
         case "heading_3":
             return _format_heading(block["heading_3"], 3)
-        case "paragraph":
-            return _format_paragraph(block["paragraph"])
         case "divider":
             return _format_divider(block["divider"])
         case "bulleted_list_item":
@@ -59,6 +72,10 @@ def block_to_markdown(block: dict) -> str:
             return _format_to_do_item(block["to_do"])
         case "quote":
             return _format_quote(block["quote"])
+        case "code":
+            return _format_code(block["code"])
+        case "callout":
+            return _format_callout(block["callout"])
         case _:
             warnings.warn(f"Block type `{block_type}` is not supported.")
             return ""
@@ -104,6 +121,26 @@ def _format_quote(block: dict) -> str:
     return f'> {_format_rich_text(block["rich_text"])}\n'
 
 
+def _format_callout(block: dict) -> str:
+    """Formats a callout block."""
+    try:
+        icon = block["icon"]["emoji"]
+    except KeyError:
+        warnings.warn("Failed to parse callout icon. Defaulting to nothing.")
+        icon = ""
+
+    text = _format_rich_text(block["rich_text"])
+
+    return f"> {icon} {text}\n\n"
+
+
+def _format_code(block: dict) -> str:
+    """Formats a code block."""
+    language = block["language"]
+    text = _format_rich_text(block["rich_text"])
+    return f"```{language}\n{text}\n```\n\n"
+
+
 def _format_divider(block: dict) -> str:
     """Formats a divider block."""
     return "---\n\n"
@@ -134,19 +171,9 @@ def _format_rich_text(rich_text: list[dict]) -> str:
         if (link := block["text"]["link"]) is not None:
             if "url" in link:
                 text = f"[{text}]({link['url']})"
+            else:
                 warnings.warn("Internal links are not supported in Markdown.")
 
         output += text
 
     return output
-
-
-def _simplify_newlines(text: str) -> str:
-    """Simplifies newlines.
-
-    Our logic means that, at times, you can have 3 newline characters in a row.
-    This is typically the case where there is an empty block character. This
-    is done in Notion to make it more readable. However, in Markdown, it can look
-    a bit strange. Hence we consolidate these 3 newline characters into 2.
-    """
-    return text.replace("\n\n\n", "\n\n")

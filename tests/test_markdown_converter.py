@@ -7,12 +7,28 @@ import pytest
 
 import n2md.converters.markdown as md
 
+##############
+## Fixtures ##
+##############
 
-def test_converter(notion_markdown: Path, markdown: Path):
-    notion_md = notion_markdown.read_text()
-    regular_md = markdown.read_text()
 
-    assert md.convert(notion_md) == regular_md
+@pytest.fixture
+def original(datadir: Path) -> Path:
+    return datadir / "markdown" / "original.md"
+
+
+@pytest.fixture
+def expected(datadir: Path) -> Path:
+    return datadir / "markdown" / "expected.md"
+
+
+###########
+## Tests ##
+###########
+
+
+def test_converter(original: Path, expected: Path):
+    assert md.convert(original.read_text()) == expected.read_text()
 
 
 @pytest.mark.parametrize(
