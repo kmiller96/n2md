@@ -2,11 +2,13 @@
 
 from pathlib import Path
 
-import n2md.converters.markdown as md
+import n2md.converters.json as json
 
 
 def test_converter(notion_json: Path, markdown: Path):
-    notion_md = notion_json.read_text()
-    regular_md = markdown.read_text()
+    result = json.convert(notion_json.read_text())
+    expected = markdown.read_text()
 
-    assert md.convert(notion_md) == regular_md
+    print(result)
+
+    assert result == expected
