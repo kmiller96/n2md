@@ -5,11 +5,6 @@
 
 </aside>
 
-<aside>
-💡 Here is a second callout for good measure.
-
-</aside>
-
 # Heading 1
 
 ## Heading 2
