@@ -4,7 +4,7 @@ from pathlib import Path
 
 import typer
 
-from n2md import convert
+from n2md import converters
 
 cli = typer.Typer()
 
@@ -13,5 +13,5 @@ cli = typer.Typer()
 def main(infile: Path, outfile: Path):
     """Converts Notion export to pure Markdown."""
     notion = infile.read_text()
-    markdown = convert(notion)
+    markdown = converters.markdown.convert(notion)
     outfile.write_text(markdown)
