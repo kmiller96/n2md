@@ -40,36 +40,28 @@ def block_to_markdown(block: dict) -> str:
     """Takes the JSON representation of a block and converts it to markdown."""
     block_type = block["type"]
 
-    if block_type == "heading_1":
-        return _format_heading(block["heading_1"], 1)
-
-    elif block_type == "heading_2":
-        return _format_heading(block["heading_2"], 2)
-
-    elif block_type == "heading_3":
-        return _format_heading(block["heading_3"], 3)
-
-    elif block_type == "paragraph":
-        return _format_paragraph(block["paragraph"])
-
-    elif block_type == "divider":
-        return _format_divider(block["divider"])
-
-    elif block_type == "bulleted_list_item":
-        return _format_bulleted_list_item(block["bulleted_list_item"])
-
-    elif block_type == "numbered_list_item":
-        return _format_numbered_list_item(block["numbered_list_item"])
-
-    elif block_type == "to_do":
-        return _format_to_do_item(block["to_do"])
-
-    elif block_type == "quote":
-        return _format_quote(block["quote"])
-
-    else:
-        warnings.warn(f"Block type `{block_type}` is not supported.")
-        return ""
+    match block["type"]:
+        case "heading_1":
+            return _format_heading(block["heading_1"], 1)
+        case "heading_2":
+            return _format_heading(block["heading_2"], 2)
+        case "heading_3":
+            return _format_heading(block["heading_3"], 3)
+        case "paragraph":
+            return _format_paragraph(block["paragraph"])
+        case "divider":
+            return _format_divider(block["divider"])
+        case "bulleted_list_item":
+            return _format_bulleted_list_item(block["bulleted_list_item"])
+        case "numbered_list_item":
+            return _format_numbered_list_item(block["numbered_list_item"])
+        case "to_do":
+            return _format_to_do_item(block["to_do"])
+        case "quote":
+            return _format_quote(block["quote"])
+        case _:
+            warnings.warn(f"Block type `{block_type}` is not supported.")
+            return ""
 
 
 def _format_heading(block: dict, n: int) -> str:
